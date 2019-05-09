@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+    php:
+        container_name: php_anaxago
+        build:
+          context: ./config/docker/
+        ports:
+          - 9034:9034
+          - '9123:22'
+        external_links:
+          - mysql
+        volumes:
+            - .:/var/www/anaxago
+            - /var/run/php7-fpm/:/var/run/php7-fpm/
+            - ./config/docker/anaxago.conf:/usr/local/etc/php-fpm.d/anaxago.conf
+        networks:
+            - anaxago
+            - common
+        working_dir: /var/www/anaxago
+        tty: true
+networks:
+    anaxago:
+      external:
+        name: anaxago
+    common:
+        external:
+          name : common
