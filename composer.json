@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
+        "friendsofphp/php-cs-fixer": "^2.15",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
@@ -18,6 +19,7 @@
         "preferred-install": {
             "*": "dist"
         },
+        "bin-dir": "bin",
         "sort-packages": true
     },
     "autoload": {
@@ -44,10 +46,12 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "PhpGitHooks\\Infrastructure\\Composer\\ConfiguratorScript::buildConfig"
         ],
         "post-update-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "PhpGitHooks\\Infrastructure\\Composer\\ConfiguratorScript::buildConfig"
         ],
         "init-db": [
             "php bin/console doctrine:database:drop --if-exists --force",

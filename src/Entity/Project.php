@@ -6,7 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Project
+ * Project.
  *
  * @ApiResource(
  *     collectionOperations={"get"},
@@ -47,9 +47,15 @@ class Project
      */
     private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="financed", type="boolean")
+     */
+    private $financed;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -59,7 +65,7 @@ class Project
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
      *
@@ -73,7 +79,7 @@ class Project
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -83,7 +89,7 @@ class Project
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -97,7 +103,7 @@ class Project
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -107,7 +113,7 @@ class Project
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -121,7 +127,7 @@ class Project
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -129,5 +135,20 @@ class Project
     {
         return $this->description;
     }
-}
 
+    /**
+     * @return string
+     */
+    public function isFinanced(): string
+    {
+        return $this->financed;
+    }
+
+    /**
+     * @param string $financed
+     */
+    public function setFinanced(string $financed): void
+    {
+        $this->financed = $financed;
+    }
+}
