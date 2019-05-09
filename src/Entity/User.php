@@ -9,11 +9,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation as Api;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @Api\ApiResource(
+ * @Api\ApiResource(attributes={
+ *          "normalization_context"={"groups"={"user"}}
+ *      },
  *     collectionOperations={},
  *     itemOperations={
  *         "login"={
@@ -37,13 +41,43 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *                  "summary" = "Generate a valid jwt token",
  *                  "consumes" = {
  *                      "application/json"
-  *                   },
+ *                   },
  *                  "produces" = {
  *                      "application/json"
  *                   }
-*              }
- *         }
- *     }
+ *              }
+ *         },
+ *         "post_interest"={
+ *           "route_name"="post_interest",
+ *           "swagger_context": {
+ *                  "parameters": {
+ *                     { "name": "id", "in": "path", "required": "true", "type": "string" },
+ *                     {
+ *                          "name"="interest",
+ *                          "in"="body",
+ *                          "required"="true",
+ *                          "schema"={
+ *                              "type"="object",
+ *                              "required"={"project", "bet"},
+ *                              "properties"={
+ *                                  "project"={"type"="string"},
+ *                                  "bet"={"type"="string"}
+ *                              }
+ *                          }
+ *                      }
+ *                   },
+ *                  "summary"="Set a interest for a project."
+ *              },
+ *           "access_control"="is_granted('ROLE_USER') and object.getId() == user.getId()",
+ *           "defaults": {"_api_receive": false},
+ *          },
+ *         "get_interests"={
+ *           "method"="GET",
+ *           "path"="/users/{id}/interests",
+ *           "access_control"="is_granted('ROLE_USER') and object.getId() == user.getId()",
+ *          },
+
+  *     }
  * )
  * @ORM\Entity
  * @ORM\Table(name="user")
@@ -107,6 +141,14 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Interest", mappedBy="user")
+     * @ORM\JoinColumn(referencedColumnName="id", unique=true)
+     * @ApiSubresource
+     * @Groups("user")
+     */
+    private $interests;
 
     /**
      * @return int
@@ -309,5 +351,13 @@ class User implements UserInterface
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInterests()
+    {
+        return $this->interests;
     }
 }
