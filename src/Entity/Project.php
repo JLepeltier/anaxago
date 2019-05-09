@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,8 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
+ * @ApiFilter(BooleanFilter::class, properties={"financed"})
+ *
  * @ORM\Table(name="project")
- * @ORM\Entity(repositoryClass="Anaxago\CoreBundle\Repository\ProjectRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  */
 class Project
 {
@@ -48,7 +53,7 @@ class Project
     private $description;
 
     /**
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="financed", type="boolean")
      */
@@ -137,18 +142,23 @@ class Project
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function isFinanced(): string
+    public function isFinanced(): bool
     {
         return $this->financed;
     }
 
     /**
      * @param string $financed
+     *
+     * @return Project
+     *
      */
-    public function setFinanced(string $financed): void
+    public function setFinanced(bool $financed)
     {
         $this->financed = $financed;
+
+        return $this;
     }
 }

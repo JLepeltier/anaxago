@@ -8,10 +8,43 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation as Api;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * @Api\ApiResource(
+ *     collectionOperations={},
+ *     itemOperations={
+ *         "login"={
+ *             "route_name"="authentication_token",
+ *             "swagger_context"={
+ *                  "parameters"={
+ *                      {
+ *                          "name"="user",
+ *                          "in"="body",
+ *                          "required"="true",
+ *                          "schema"={
+ *                              "type"="object",
+ *                              "required"={"email", "password"},
+ *                              "properties"={
+ *                                  "email"={"type"="string"},
+ *                                  "password"={"type"="string"}
+ *                              }
+ *                          }
+ *                      }
+ *                   },
+ *                  "summary" = "Generate a valid jwt token",
+ *                  "consumes" = {
+ *                      "application/json"
+  *                   },
+ *                  "produces" = {
+ *                      "application/json"
+ *                   }
+*              }
+ *         }
+ *     }
+ * )
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
